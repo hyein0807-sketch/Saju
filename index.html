@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111225">
+<title>사주로봇</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:radial-gradient(circle at top,#2b234c,#111225 55%);color:#f7f4ff}.wrap{max-width:520px;margin:auto;padding:30px 18px 60px}.brand{font-size:12px;letter-spacing:.18em;color:#e8c76e;font-weight:800}h1{font-size:35px;line-height:1.17;margin:14px 0 9px}.sub{color:#bbb7cc;line-height:1.6}.card{margin-top:24px;background:#1b1d35;border:1px solid #363955;border-radius:22px;padding:20px;box-shadow:0 18px 50px #0004}label{display:block;font-size:13px;margin:17px 0 7px;color:#ddd9e9}.row{display:flex;gap:8px}.seg{flex:1;background:#282b48;border:1px solid #414565;color:#fff;padding:12px;border-radius:12px;font-size:15px}.seg.on{border-color:#e8c76e;color:#fff1b7}input,select{width:100%;background:#121426;border:1px solid #414565;color:#fff;padding:13px;border-radius:12px;font-size:16px}.go{width:100%;border:0;margin-top:23px;padding:15px;border-radius:14px;background:linear-gradient(135deg,#f2d88d,#c99e42);font-size:16px;font-weight:850;color:#211707}.hide{display:none}.orb{width:90px;height:90px;margin:10px auto 18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff5c7,#b98d3b 30%,#623d73 68%,#211a39);box-shadow:0 0 48px #e6c36a55}.center{text-align:center}.gold{color:#e8c76e;font-size:13px}.pill{background:#232642;padding:15px;border-radius:16px;margin:10px 0}.pill b{display:block;margin-bottom:6px}.pill span{font-size:14px;color:#bbb7cc;line-height:1.55}.menu{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}.menu button{background:#171a30;border:1px solid #393d5c;color:white;padding:13px;border-radius:12px}.back{width:100%;background:none;border:0;color:#aaa7bd;padding:18px}.note{text-align:center;font-size:11px;color:#89869d;line-height:1.55;margin-top:16px}.entered{font-size:13px;color:#d8d4e5;background:#15172b;padding:12px;border-radius:13px;margin-bottom:12px}
+</style>
+</head>
+<body><div class="wrap">
+<div class="brand">SAJU ROBOT · WEB MVP</div>
+<section id="form">
+<h1>당신의 사주를<br>읽어볼게요.</h1>
+<p class="sub">출생정보를 입력하면 사주로봇이 원국과 운의 흐름을 분석합니다.</p>
+<div class="card">
+<label>성별</label><div class="row"><button type="button" class="seg on" data-g="sex">여성</button><button type="button" class="seg" data-g="sex">남성</button></div>
+<label>달력</label><div class="row"><button type="button" class="seg on" data-g="cal">양력</button><button type="button" class="seg" data-g="cal">음력</button></div>
+<label for="birth">생년월일</label><input type="date" id="birth">
+<label for="time">태어난 시간</label><input type="time" id="time">
+<label for="country">출생 국가</label><select id="country"><option>대한민국</option><option>기타</option></select>
+<button type="button" class="go" id="go">사주 보기</button>
+</div><p class="note">첫 웹 MVP입니다. 현재는 입력과 화면 흐름을 검증하는 단계입니다.</p>
+</section>
+<section id="result" class="hide">
+<div class="orb"></div><div class="center gold">첫 번째 판독</div>
+<h2 class="center">당신의 사주에서<br>강하게 보이는 세 가지</h2>
+<div class="card">
+<div id="entered" class="entered"></div>
+<div class="pill"><b>01 · 현실을 움직이는 힘</b><span>생각과 선택이 실제 결과로 어떻게 이어지는지 분석합니다.</span></div>
+<div class="pill"><b>02 · 돈과 일의 연결</b><span>돈을 버는 방식, 지키는 방식과 직업 구조를 함께 살펴봅니다.</span></div>
+<div class="pill"><b>03 · 관계 속의 책임</b><span>배우자·자녀·가족 관계에서 맡는 역할과 경계를 살펴봅니다.</span></div>
+<div class="menu"><button>💰 재물운</button><button>💼 직업·사업</button><button>💞 배우자·궁합</button><button>👨‍👩‍👧 자녀</button><button>🧭 인생 흐름</button><button>✨ 올해 운세</button></div>
+<button type="button" class="back" id="back">← 다시 입력</button>
+</div>
+</section>
+</div>
+<script>
+(function(){
+let sex="여성",cal="양력";
+document.querySelectorAll(".seg").forEach(function(b){
+ b.addEventListener("click",function(){
+  document.querySelectorAll('[data-g="'+b.dataset.g+'"]').forEach(function(x){x.classList.remove("on")});
+  b.classList.add("on");
+  if(b.dataset.g==="sex") sex=b.textContent; else cal=b.textContent;
+ });
+});
+document.getElementById("go").addEventListener("click",function(){
+ let birth=document.getElementById("birth").value||"미입력";
+ let time=document.getElementById("time").value||"시간 모름";
+ let country=document.getElementById("country").value;
+ document.getElementById("entered").textContent=sex+" · "+cal+" · "+birth+" · "+time+" · "+country;
+ document.getElementById("form").classList.add("hide");
+ document.getElementById("result").classList.remove("hide");
+ window.scrollTo(0,0);
+});
+document.getElementById("back").addEventListener("click",function(){
+ document.getElementById("result").classList.add("hide");
+ document.getElementById("form").classList.remove("hide");
+ window.scrollTo(0,0);
+});
+})();
+</script></body></html>
