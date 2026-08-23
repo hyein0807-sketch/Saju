@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111225">
-<title>사주로봇 V2.1</title>
+<title>사주로봇 V2.2</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;background:radial-gradient(circle at top,#2b234c,#111225 55%);color:#f7f4ff}
@@ -41,11 +41,11 @@ select,input{width:100%;background:#121426;border:1px solid #414565;color:white;
 </head>
 <body>
 <div class="wrap">
-<div class="brand">SAJU ROBOT · V2.1</div>
+<div class="brand">SAJU ROBOT · V2.2</div>
 
 <section id="form">
 <h1>당신의 사주를<br>읽어볼게요.</h1>
-<p class="sub">생년월일을 한 화면에서 바로 선택하고, 태어난 시간을 모르는 경우도 그대로 진행할 수 있어요.</p>
+<p class="sub">생년월일은 한 번에 선택하고, 태어난 시간을 모르는 경우도 그대로 진행할 수 있어요.</p>
 
 <div class="card">
 <label>성별</label>
@@ -61,11 +61,7 @@ select,input{width:100%;background:#121426;border:1px solid #414565;color:white;
 </div>
 
 <label>생년월일</label>
-<div class="birth-grid">
-<select id="year" aria-label="출생년도"></select>
-<select id="month" aria-label="출생월"></select>
-<select id="day" aria-label="출생일"></select>
-</div>
+<input type="date" id="birth" value="1987-08-07" min="1900-01-01" max="2026-12-31">
 
 <label>태어난 시간</label>
 <div class="time-row">
@@ -125,28 +121,6 @@ const SK=["갑","을","병","정","무","기","경","신","임","계"];
 const BK=["자","축","인","묘","진","사","오","미","신","유","술","해"];
 const SE=[0,0,1,1,2,2,3,3,4,4], BE=[4,2,0,0,2,1,1,2,3,3,2,4];
 
-const ySel=document.getElementById("year"), mSel=document.getElementById("month"), dSel=document.getElementById("day");
-const nowY=new Date().getFullYear();
-
-for(let y=nowY;y>=1930;y--){
-  const o=document.createElement("option"); o.value=y; o.textContent=y+"년"; ySel.appendChild(o);
-}
-for(let m=1;m<=12;m++){
-  const o=document.createElement("option"); o.value=m; o.textContent=m+"월"; mSel.appendChild(o);
-}
-function daysInMonth(y,m){ return new Date(y,m,0).getDate(); }
-function refreshDays(){
-  const y=Number(ySel.value), m=Number(mSel.value), keep=Number(dSel.value)||1;
-  dSel.innerHTML="";
-  const max=daysInMonth(y,m);
-  for(let d=1;d<=max;d++){
-    const o=document.createElement("option"); o.value=d; o.textContent=d+"일"; dSel.appendChild(o);
-  }
-  dSel.value=Math.min(keep,max);
-}
-ySel.value=1987; mSel.value=8; refreshDays(); dSel.value=7;
-ySel.addEventListener("change",refreshDays); mSel.addEventListener("change",refreshDays);
-
 document.querySelectorAll(".seg").forEach(b=>{
   b.onclick=()=>{
     document.querySelectorAll('[data-g="'+b.dataset.g+'"]').forEach(x=>x.classList.remove("on"));
@@ -202,7 +176,9 @@ function addEl(p,c){
 }
 
 document.getElementById("go").onclick=()=>{
-  const y=Number(ySel.value), m=Number(mSel.value), d=Number(dSel.value);
+  const birth=document.getElementById("birth").value;
+  if(!birth){ alert("생년월일을 선택해주세요."); return; }
+  const [y,m,d]=birth.split("-").map(Number);
 
   if(cal==="음력"){
     alert("음력은 정확한 변환 엔진을 붙이는 다음 버전에서 지원할게요. 지금은 양력으로 먼저 검증 중입니다.");
