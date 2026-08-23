@@ -1,1 +1,255 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111225"><title>사주로봇 V2</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif;background:radial-gradient(circle at top,#2b234c,#111225 55%);color:#f7f4ff}.wrap{max-width:520px;margin:auto;padding:30px 18px 60px}.brand{font-size:12px;letter-spacing:.18em;color:#e8c76e;font-weight:800}h1{font-size:35px;line-height:1.17;margin:14px 0 9px}.sub,.muted{color:#bbb7cc;line-height:1.6}.card{margin-top:24px;background:#1b1d35;border:1px solid #363955;border-radius:22px;padding:20px}.row{display:flex;gap:8px}label{display:block;font-size:13px;margin:17px 0 7px}.seg{flex:1;background:#282b48;border:1px solid #414565;color:white;padding:12px;border-radius:12px}.seg.on{border-color:#e8c76e;color:#fff1b7}input,select{width:100%;background:#121426;border:1px solid #414565;color:white;padding:13px;border-radius:12px;font-size:16px}.go{width:100%;border:0;margin-top:23px;padding:15px;border-radius:14px;background:linear-gradient(135deg,#f2d88d,#c99e42);font-size:16px;font-weight:800}.hide{display:none}.center{text-align:center}.gold{color:#e8c76e}.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:16px 0}.pillar{background:#121426;border:1px solid #3c4060;border-radius:15px;text-align:center;padding:12px 3px}.pillar small{color:#aaa7bd}.pillar strong{display:block;font-family:serif;font-size:27px;margin:8px 0 3px}.elements{display:flex;gap:6px;margin:12px 0}.el{flex:1;text-align:center;background:#232642;border-radius:12px;padding:10px 2px}.el b{display:block;font-size:18px}.el span{font-size:11px;color:#aaa7bd}.pill{background:#232642;padding:15px;border-radius:16px;margin:10px 0}.pill b{display:block;margin-bottom:6px}.pill span{font-size:14px;color:#bbb7cc;line-height:1.55}.menu{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}.menu button{background:#171a30;border:1px solid #393d5c;color:white;padding:13px;border-radius:12px}.back{width:100%;background:none;border:0;color:#aaa7bd;padding:18px}.note{text-align:center;font-size:11px;color:#89869d;line-height:1.5;margin-top:16px}.warning{font-size:12px;color:#e8c76e;line-height:1.5;margin-top:12px}</style></head><body><div class="wrap"><div class="brand">SAJU ROBOT · V2</div><section id="form"><h1>당신의 사주를<br>읽어볼게요.</h1><p class="sub">출생정보로 사주 네 기둥과 오행 구조를 먼저 계산합니다.</p><div class="card"><label>성별</label><div class="row"><button class="seg on" data-g="sex">여성</button><button class="seg" data-g="sex">남성</button></div><label>달력</label><div class="row"><button class="seg on" data-g="cal">양력</button><button class="seg" data-g="cal">음력</button></div><label>생년월일</label><input type="date" id="birth"><label>태어난 시간</label><input type="time" id="time"><label>출생 국가</label><select id="country"><option>대한민국</option><option>기타</option></select><button class="go" id="go">사주 원국 보기</button></div><p class="note">V2 계산 프로토타입 · 양력/대한민국 기준 우선 지원</p></section><section id="result" class="hide"><div class="center gold">四柱 · 원국</div><h2 class="center">당신의 사주 네 기둥</h2><div class="card"><div class="pillars"><div class="pillar"><small>년주</small><strong id="py">-</strong><span id="pyk"></span></div><div class="pillar"><small>월주</small><strong id="pm">-</strong><span id="pmk"></span></div><div class="pillar"><small>일주</small><strong id="pd">-</strong><span id="pdk"></span></div><div class="pillar"><small>시주</small><strong id="ph">-</strong><span id="phk"></span></div></div><h3>오행 분포</h3><div class="elements"><div class="el">木<b id="e0">0</b><span>목</span></div><div class="el">火<b id="e1">0</b><span>화</span></div><div class="el">土<b id="e2">0</b><span>토</span></div><div class="el">金<b id="e3">0</b><span>금</span></div><div class="el">水<b id="e4">0</b><span>수</span></div></div><div id="summary"></div><div class="menu"><button>💰 재물운</button><button>💼 직업·사업</button><button>💞 배우자·궁합</button><button>👨‍👩‍👧 자녀</button><button>🧭 인생 흐름</button><button>✨ 올해 운세</button></div><div id="warn" class="warning"></div><button class="back" id="back">← 다시 입력</button></div></section></div><script>(function(){let sex='여성',cal='양력';const S='甲乙丙丁戊己庚辛壬癸',B='子丑寅卯辰巳午未申酉戌亥',SK=['갑','을','병','정','무','기','경','신','임','계'],BK=['자','축','인','묘','진','사','오','미','신','유','술','해'],SE=[0,0,1,1,2,2,3,3,4,4],BE=[4,2,0,0,2,1,1,2,3,3,2,4];document.querySelectorAll('.seg').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-g="'+b.dataset.g+'"]').forEach(x=>x.classList.remove('on'));b.classList.add('on');if(b.dataset.g==='sex')sex=b.textContent;else cal=b.textContent});function jd(y,m,d){if(m<=2){y--;m+=12}let A=Math.floor(y/100),C=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+C-1524}function dayP(y,m,d){let j=jd(y,m,d),idx=((j+49)%60+60)%60;return S[idx%10]+B[idx%12]}function yearP(y,m,d){let yy=(m<2||(m===2&&d<4))?y-1:y,idx=((yy-4)%60+60)%60;return S[idx%10]+B[idx%12]}function monthP(y,m,d,yp){let bounds=[6,4,6,6,6,6,8,8,8,8,7,7],mm=m;if(d<bounds[m-1])mm--;if(mm===0)mm=12;let branch=(mm+1)%12,ys=S.indexOf(yp[0]),first=(ys%5)*2+2,offset=(branch-2+12)%12,si=(first+offset)%10;return S[si]+B[branch]}function hourP(dp,h){let bi=h===23?0:Math.floor((h+1)/2)%12,ds=S.indexOf(dp[0]),si=((ds%5)*2+bi)%10;return S[si]+B[bi]}function ko(p){return SK[S.indexOf(p[0])]+BK[B.indexOf(p[1])]}function el(p,c){c[SE[S.indexOf(p[0])]]++;c[BE[B.indexOf(p[1])]]++}document.getElementById('go').onclick=()=>{let v=document.getElementById('birth').value,t=document.getElementById('time').value;if(!v){alert('생년월일을 입력해주세요.');return}let [y,m,d]=v.split('-').map(Number),h=t?Number(t.split(':')[0]):12;if(cal==='음력'){alert('V2에서는 먼저 양력 계산을 검증하고 있어요. 음력 변환은 다음 버전에 연결합니다.');return}let yp=yearP(y,m,d),mp=monthP(y,m,d,yp),dp=dayP(y,m,d),hp=hourP(dp,h),ps=[yp,mp,dp,hp];['py','pm','pd','ph'].forEach((id,i)=>{document.getElementById(id).textContent=ps[i];document.getElementById(id+'k').textContent=ko(ps[i])});let c=[0,0,0,0,0];ps.forEach(p=>el(p,c));c.forEach((n,i)=>document.getElementById('e'+i).textContent=n);let max=Math.max(...c),min=Math.min(...c),names=['목','화','토','금','수'],strong=names[c.indexOf(max)],weak=names[c.indexOf(min)];document.getElementById('summary').innerHTML='<div class="pill"><b>01 · 일간 '+dp[0]+'('+SK[S.indexOf(dp[0])]+')</b><span>사주 해석의 중심이 되는 나 자신을 나타내는 글자입니다.</span></div><div class="pill"><b>02 · '+strong+' 기운이 두드러집니다</b><span>현재 8글자의 단순 오행 집계에서 가장 많이 나타난 기운입니다.</span></div><div class="pill"><b>03 · '+weak+' 기운은 상대적으로 적습니다</b><span>다음 단계에서는 계절의 세력·지장간·십성까지 반영해 단순 개수와 실제 강약을 구분합니다.</span></div>';document.getElementById('warn').textContent='※ 현재 V2는 검증용 계산 프로토타입입니다. 절입의 정확한 시각, 음력·윤달, 야자시, 진태양시와 대운은 V2.1에서 보정합니다.';document.getElementById('form').classList.add('hide');document.getElementById('result').classList.remove('hide');scrollTo(0,0)};document.getElementById('back').onclick=()=>{document.getElementById('result').classList.add('hide');document.getElementById('form').classList.remove('hide');scrollTo(0,0)}})();</script></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111225">
+<title>사주로봇 V2.1</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;background:radial-gradient(circle at top,#2b234c,#111225 55%);color:#f7f4ff}
+.wrap{max-width:520px;margin:auto;padding:30px 18px 60px}
+.brand{font-size:12px;letter-spacing:.18em;color:#e8c76e;font-weight:800}
+h1{font-size:35px;line-height:1.17;margin:14px 0 9px}
+.sub{color:#bbb7cc;line-height:1.6}
+.card{margin-top:24px;background:#1b1d35;border:1px solid #363955;border-radius:22px;padding:20px}
+.row{display:flex;gap:8px}
+label{display:block;font-size:13px;margin:17px 0 7px;color:#ddd9e9}
+.seg{flex:1;background:#282b48;border:1px solid #414565;color:white;padding:12px;border-radius:12px;font-size:15px}
+.seg.on{border-color:#e8c76e;color:#fff1b7}
+select,input{width:100%;background:#121426;border:1px solid #414565;color:white;padding:13px;border-radius:12px;font-size:16px}
+.birth-grid{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:8px}
+.birth-grid select{text-align:center}
+.time-row{display:grid;grid-template-columns:1fr 118px;gap:8px;align-items:stretch}
+.unknown{border:1px solid #414565;background:#282b48;color:#fff;border-radius:12px;font-size:14px}
+.unknown.on{border-color:#e8c76e;color:#fff1b7;background:#33304a}
+.disabled{opacity:.45}
+.go{width:100%;border:0;margin-top:23px;padding:15px;border-radius:14px;background:linear-gradient(135deg,#f2d88d,#c99e42);font-size:16px;font-weight:800;color:#211707}
+.hide{display:none}
+.center{text-align:center}.gold{color:#e8c76e}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:16px 0}
+.pillar{background:#121426;border:1px solid #3c4060;border-radius:15px;text-align:center;padding:12px 3px}
+.pillar small{color:#aaa7bd}.pillar strong{display:block;font-family:serif;font-size:27px;margin:8px 0 3px}
+.elements{display:flex;gap:6px;margin:12px 0}
+.el{flex:1;text-align:center;background:#232642;border-radius:12px;padding:10px 2px}.el b{display:block;font-size:18px}.el span{font-size:11px;color:#aaa7bd}
+.pill{background:#232642;padding:15px;border-radius:16px;margin:10px 0}.pill b{display:block;margin-bottom:6px}.pill span{font-size:14px;color:#bbb7cc;line-height:1.55}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}.menu button{background:#171a30;border:1px solid #393d5c;color:white;padding:13px;border-radius:12px}
+.back{width:100%;background:none;border:0;color:#aaa7bd;padding:18px}
+.note{text-align:center;font-size:11px;color:#89869d;line-height:1.5;margin-top:16px}
+.warning{font-size:12px;color:#e8c76e;line-height:1.55;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="brand">SAJU ROBOT · V2.1</div>
+
+<section id="form">
+<h1>당신의 사주를<br>읽어볼게요.</h1>
+<p class="sub">생년월일을 한 화면에서 바로 선택하고, 태어난 시간을 모르는 경우도 그대로 진행할 수 있어요.</p>
+
+<div class="card">
+<label>성별</label>
+<div class="row">
+<button type="button" class="seg on" data-g="sex">여성</button>
+<button type="button" class="seg" data-g="sex">남성</button>
+</div>
+
+<label>달력</label>
+<div class="row">
+<button type="button" class="seg on" data-g="cal">양력</button>
+<button type="button" class="seg" data-g="cal">음력</button>
+</div>
+
+<label>생년월일</label>
+<div class="birth-grid">
+<select id="year" aria-label="출생년도"></select>
+<select id="month" aria-label="출생월"></select>
+<select id="day" aria-label="출생일"></select>
+</div>
+
+<label>태어난 시간</label>
+<div class="time-row">
+<input type="time" id="time" value="12:00">
+<button type="button" id="unknownTime" class="unknown">시간 모름</button>
+</div>
+
+<label>출생 국가</label>
+<select id="country"><option>대한민국</option><option>기타</option></select>
+
+<button type="button" class="go" id="go">사주 원국 보기</button>
+</div>
+
+<p class="note">※ 현재 원국 계산은 양력·대한민국 기준 검증 단계입니다. 정확한 절입시각 엔진은 다음 계산 업데이트에서 교체합니다.</p>
+</section>
+
+<section id="result" class="hide">
+<div class="center gold">四柱 · 원국</div>
+<h2 class="center">당신의 사주 네 기둥</h2>
+
+<div class="card">
+<div class="pillars">
+<div class="pillar"><small>년주</small><strong id="py">-</strong><span id="pyk"></span></div>
+<div class="pillar"><small>월주</small><strong id="pm">-</strong><span id="pmk"></span></div>
+<div class="pillar"><small>일주</small><strong id="pd">-</strong><span id="pdk"></span></div>
+<div class="pillar"><small>시주</small><strong id="ph">-</strong><span id="phk"></span></div>
+</div>
+
+<h3>오행 분포</h3>
+<div class="elements">
+<div class="el">木<b id="e0">0</b><span>목</span></div>
+<div class="el">火<b id="e1">0</b><span>화</span></div>
+<div class="el">土<b id="e2">0</b><span>토</span></div>
+<div class="el">金<b id="e3">0</b><span>금</span></div>
+<div class="el">水<b id="e4">0</b><span>수</span></div>
+</div>
+
+<div id="summary"></div>
+
+<div class="menu">
+<button>💰 재물운</button><button>💼 직업·사업</button>
+<button>💞 배우자·궁합</button><button>👨‍👩‍👧 자녀</button>
+<button>🧭 인생 흐름</button><button>✨ 올해 운세</button>
+</div>
+
+<div id="warn" class="warning"></div>
+<button type="button" class="back" id="back">← 다시 입력</button>
+</div>
+</section>
+</div>
+
+<script>
+(function(){
+let sex="여성", cal="양력", timeUnknown=false;
+const S="甲乙丙丁戊己庚辛壬癸", B="子丑寅卯辰巳午未申酉戌亥";
+const SK=["갑","을","병","정","무","기","경","신","임","계"];
+const BK=["자","축","인","묘","진","사","오","미","신","유","술","해"];
+const SE=[0,0,1,1,2,2,3,3,4,4], BE=[4,2,0,0,2,1,1,2,3,3,2,4];
+
+const ySel=document.getElementById("year"), mSel=document.getElementById("month"), dSel=document.getElementById("day");
+const nowY=new Date().getFullYear();
+
+for(let y=nowY;y>=1930;y--){
+  const o=document.createElement("option"); o.value=y; o.textContent=y+"년"; ySel.appendChild(o);
+}
+for(let m=1;m<=12;m++){
+  const o=document.createElement("option"); o.value=m; o.textContent=m+"월"; mSel.appendChild(o);
+}
+function daysInMonth(y,m){ return new Date(y,m,0).getDate(); }
+function refreshDays(){
+  const y=Number(ySel.value), m=Number(mSel.value), keep=Number(dSel.value)||1;
+  dSel.innerHTML="";
+  const max=daysInMonth(y,m);
+  for(let d=1;d<=max;d++){
+    const o=document.createElement("option"); o.value=d; o.textContent=d+"일"; dSel.appendChild(o);
+  }
+  dSel.value=Math.min(keep,max);
+}
+ySel.value=1987; mSel.value=8; refreshDays(); dSel.value=7;
+ySel.addEventListener("change",refreshDays); mSel.addEventListener("change",refreshDays);
+
+document.querySelectorAll(".seg").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('[data-g="'+b.dataset.g+'"]').forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    if(b.dataset.g==="sex") sex=b.textContent; else cal=b.textContent;
+  };
+});
+
+document.getElementById("unknownTime").onclick=function(){
+  timeUnknown=!timeUnknown;
+  this.classList.toggle("on",timeUnknown);
+  document.getElementById("time").disabled=timeUnknown;
+  document.getElementById("time").classList.toggle("disabled",timeUnknown);
+};
+
+function jd(y,m,d){
+  if(m<=2){y--;m+=12}
+  const A=Math.floor(y/100), C=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+C-1524;
+}
+function dayP(y,m,d){
+  const j=jd(y,m,d), idx=((j+49)%60+60)%60;
+  return S[idx%10]+B[idx%12];
+}
+function yearP(y,m,d){
+  const yy=(m<2||(m===2&&d<4))?y-1:y;
+  const idx=((yy-4)%60+60)%60;
+  return S[idx%10]+B[idx%12];
+}
+function monthP(y,m,d,yp){
+  // 임시 근사 로직. 절입 시각 엔진으로 교체 예정.
+  const bounds=[6,4,6,6,6,6,8,8,8,8,7,7];
+  let mm=m;
+  if(d<bounds[m-1]) mm--;
+  if(mm===0) mm=12;
+  const branch=(mm+1)%12, ys=S.indexOf(yp[0]);
+  const first=(ys%5)*2+2, offset=(branch-2+12)%12, si=(first+offset)%10;
+  return S[si]+B[branch];
+}
+function hourP(dp,h){
+  const bi=h===23?0:Math.floor((h+1)/2)%12;
+  const ds=S.indexOf(dp[0]), si=((ds%5)*2+bi)%10;
+  return S[si]+B[bi];
+}
+function ko(p){
+  if(!p || p==="未知") return "시간 모름";
+  return SK[S.indexOf(p[0])]+BK[B.indexOf(p[1])];
+}
+function addEl(p,c){
+  if(!p || p==="未知") return;
+  c[SE[S.indexOf(p[0])]]++;
+  c[BE[B.indexOf(p[1])]]++;
+}
+
+document.getElementById("go").onclick=()=>{
+  const y=Number(ySel.value), m=Number(mSel.value), d=Number(dSel.value);
+
+  if(cal==="음력"){
+    alert("음력은 정확한 변환 엔진을 붙이는 다음 버전에서 지원할게요. 지금은 양력으로 먼저 검증 중입니다.");
+    return;
+  }
+
+  const yp=yearP(y,m,d), mp=monthP(y,m,d,yp), dp=dayP(y,m,d);
+  let hp="未知";
+  if(!timeUnknown){
+    const t=document.getElementById("time").value||"12:00";
+    hp=hourP(dp,Number(t.split(":")[0]));
+  }
+  const ps=[yp,mp,dp,hp];
+
+  ["py","pm","pd","ph"].forEach((id,i)=>{
+    document.getElementById(id).textContent=ps[i];
+    document.getElementById(id+"k").textContent=ko(ps[i]);
+  });
+
+  const c=[0,0,0,0,0];
+  ps.forEach(p=>addEl(p,c));
+  c.forEach((n,i)=>document.getElementById("e"+i).textContent=n);
+
+  const names=["목","화","토","금","수"];
+  const max=Math.max(...c), min=Math.min(...c);
+  const strong=names[c.indexOf(max)], weak=names[c.indexOf(min)];
+
+  let html='<div class="pill"><b>01 · 일간 '+dp[0]+'('+SK[S.indexOf(dp[0])]+')</b><span>사주 해석의 중심이 되는 나 자신을 나타내는 글자입니다.</span></div>';
+  html+='<div class="pill"><b>02 · '+strong+' 기운이 두드러집니다</b><span>현재 표시된 천간·지지의 단순 오행 집계에서 가장 많이 나타난 기운입니다.</span></div>';
+  html+='<div class="pill"><b>03 · '+weak+' 기운은 상대적으로 적습니다</b><span>다음 계산 단계에서는 계절 세력·지장간·십성까지 반영해 실제 강약을 따로 판단합니다.</span></div>';
+  document.getElementById("summary").innerHTML=html;
+
+  let w="※ 월주는 아직 절입 날짜 근사치 버전입니다. 정확한 절입 ‘시각’ 엔진으로 교체 후 해석 기능을 연결합니다.";
+  if(timeUnknown) w+=" 태어난 시간을 모르면 시주·자녀·말년 및 일부 세부 해석의 확신도를 낮춰서 보여주게 됩니다.";
+  document.getElementById("warn").textContent=w;
+
+  document.getElementById("form").classList.add("hide");
+  document.getElementById("result").classList.remove("hide");
+  scrollTo(0,0);
+};
+
+document.getElementById("back").onclick=()=>{
+  document.getElementById("result").classList.add("hide");
+  document.getElementById("form").classList.remove("hide");
+  scrollTo(0,0);
+};
+})();
+</script>
+</body>
+</html>
