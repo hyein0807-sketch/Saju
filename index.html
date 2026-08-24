@@ -4,36 +4,48 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111225">
-<title>사주로봇 V3</title>
+<title>사주로봇 V5 리포트</title>
 <script src="https://cdn.jsdelivr.net/npm/korean-lunar-calendar@0.3.6/dist/korean-lunar-calendar.min.js"></script>
 <style>
-*{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:radial-gradient(circle at top,#2b234c,#111225 55%);color:#f7f4ff}
-.wrap{max-width:560px;margin:auto;padding:28px 16px 70px}.brand{font-size:12px;letter-spacing:.18em;color:#e8c76e;font-weight:800}
-h1{font-size:34px;line-height:1.17;margin:14px 0 8px}.sub,.muted{color:#bbb7cc;line-height:1.58}
-.card{margin-top:22px;background:#1b1d35;border:1px solid #363955;border-radius:22px;padding:18px;box-shadow:0 18px 50px #0004}
-.row{display:flex;gap:8px} label{display:block;font-size:13px;margin:16px 0 7px;color:#ddd9e9}
-.seg{flex:1;background:#282b48;border:1px solid #414565;color:white;padding:12px;border-radius:12px;font-size:15px}.seg.on{border-color:#e8c76e;color:#fff1b7}
-input,select{width:100%;background:#121426;border:1px solid #414565;color:white;padding:13px;border-radius:12px;font-size:16px}
-.time-row{display:grid;grid-template-columns:1fr 118px;gap:8px}.unknown{border:1px solid #414565;background:#282b48;color:#fff;border-radius:12px;font-size:14px}.unknown.on{border-color:#e8c76e;color:#fff1b7}.disabled{opacity:.45}
+*{box-sizing:border-box}
+:root{--bg:#111225;--card:#1b1d35;--soft:#232642;--line:#373b5b;--gold:#e8c76e;--text:#f7f4ff;--muted:#bbb7cc}
+body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:radial-gradient(circle at top,#2b234c,var(--bg) 55%);color:var(--text)}
+.wrap{max-width:760px;margin:auto;padding:28px 16px 80px}
+.brand{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:800}
+h1{font-size:34px;line-height:1.17;margin:14px 0 8px}.sub,.muted{color:var(--muted);line-height:1.6}
+.card{margin-top:22px;background:var(--card);border:1px solid #363955;border-radius:22px;padding:18px;box-shadow:0 18px 50px #0004}
+.row{display:flex;gap:8px}label{display:block;font-size:13px;margin:16px 0 7px;color:#ddd9e9}
+.seg{flex:1;background:#282b48;border:1px solid #414565;color:#fff;padding:12px;border-radius:12px;font-size:15px}.seg.on{border-color:var(--gold);color:#fff1b7}
+input,select{width:100%;background:#121426;border:1px solid #414565;color:#fff;padding:13px;border-radius:12px;font-size:16px}
+.time-row{display:grid;grid-template-columns:1fr 118px;gap:8px}.unknown{border:1px solid #414565;background:#282b48;color:#fff;border-radius:12px;font-size:14px}.unknown.on{border-color:var(--gold);color:#fff1b7}.disabled{opacity:.45}
 .check{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:13px;color:#c9c5d8}.check input{width:auto}
-.go{width:100%;border:0;margin-top:22px;padding:15px;border-radius:14px;background:linear-gradient(135deg,#f2d88d,#c99e42);font-size:16px;font-weight:800;color:#211707}
-.hide{display:none}.center{text-align:center}.gold{color:#e8c76e}
-.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:15px 0}.pillar{background:#121426;border:1px solid #3c4060;border-radius:15px;text-align:center;padding:11px 2px}.pillar small{color:#aaa7bd}.pillar strong{display:block;font-family:serif;font-size:27px;margin:7px 0 3px}.pillar .tg{font-size:11px;color:#e8c76e}
-.elements{display:flex;gap:6px;margin:12px 0}.el{flex:1;text-align:center;background:#232642;border-radius:12px;padding:9px 2px}.el b{display:block;font-size:18px}.el span{font-size:11px;color:#aaa7bd}
-.pill{background:#232642;padding:14px;border-radius:16px;margin:9px 0}.pill b{display:block;margin-bottom:6px}.pill span{font-size:14px;color:#bbb7cc;line-height:1.56}
-.menu{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}.menu button{background:#171a30;border:1px solid #393d5c;color:white;padding:13px;border-radius:12px;font-size:14px}
-.section{margin-top:18px}.section h3{margin:0 0 9px}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{background:#15172b;border:1px solid #343854;border-radius:999px;padding:7px 10px;font-size:12px;color:#d4d0e3}
-.luck{overflow-x:auto;display:flex;gap:8px;padding-bottom:4px}.luck .box{min-width:82px;background:#15172b;border:1px solid #343854;border-radius:13px;padding:10px;text-align:center}.luck strong{display:block;font-family:serif;font-size:21px}
-.detail{margin-top:16px;background:#131529;border:1px solid #343854;border-radius:18px;padding:16px}.detail h3{color:#e8c76e;margin-top:0}.detail p{color:#c7c3d5;line-height:1.65;font-size:14px}
-.back{width:100%;background:none;border:0;color:#aaa7bd;padding:18px}.note,.warning{font-size:11px;line-height:1.5;margin-top:14px}.note{color:#89869d;text-align:center}.warning{color:#e8c76e}
+.go,.printbtn{width:100%;border:0;padding:15px;border-radius:14px;background:linear-gradient(135deg,#f2d88d,#c99e42);font-size:16px;font-weight:800;color:#211707}.go{margin-top:22px}
+.hide{display:none}.center{text-align:center}.gold{color:var(--gold)}
+.note,.warning{font-size:11px;line-height:1.55;margin-top:14px}.note{color:#89869d;text-align:center}.warning{color:var(--gold)}
+.topbar{display:flex;gap:8px;position:sticky;top:8px;z-index:20;margin:0 0 14px}.topbar button{border:1px solid #514b36;background:#17192c;color:#f6e2a2;padding:10px 12px;border-radius:12px;flex:1}
+.report-page{background:#17192d;border:1px solid #343854;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 15px 45px #0003}
+.page-kicker{font-size:11px;letter-spacing:.14em;color:var(--gold);font-weight:800}.page-title{font-size:25px;margin:8px 0 8px}.page-desc{color:var(--muted);font-size:14px;line-height:1.65;margin-bottom:16px}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:15px 0}.pillar{background:#101225;border:1px solid #3c4060;border-radius:15px;text-align:center;padding:11px 2px}.pillar small{color:#aaa7bd}.pillar strong{display:block;font-family:serif;font-size:27px;margin:7px 0 3px}.pillar .tg{font-size:11px;color:var(--gold)}
+.elements{display:flex;gap:6px;margin:12px 0}.el{flex:1;text-align:center;background:var(--soft);border-radius:12px;padding:9px 2px}.el b{display:block;font-size:18px}.el span{font-size:11px;color:#aaa7bd}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.block{background:#20233c;border:1px solid var(--line);border-radius:16px;padding:14px}.block h3,.block h4{margin:0 0 7px;color:#f6e2a2}.block p{margin:0;color:#c6c2d5;font-size:14px;line-height:1.65}.block small{color:#9692aa}
+.phase{border-left:3px solid #a98a45}.tag{display:inline-block;background:#121426;border:1px solid #343854;border-radius:999px;padding:6px 9px;margin:3px 3px 0 0;font-size:11px;color:#d3cfdf}
+.timeline{display:grid;gap:9px}.yearrow{display:grid;grid-template-columns:72px 1fr;gap:10px;align-items:start;background:#20233c;border:1px solid var(--line);border-radius:15px;padding:12px}.yearrow .yr{font-weight:800;color:#f6e2a2}.yearrow p{margin:0;color:#c6c2d5;font-size:13px;line-height:1.6}
+.decisions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.decision{background:#20233c;border:1px solid var(--line);border-radius:15px;padding:12px}.decision b{display:block;color:#f6e2a2;margin-bottom:5px}.meter{height:6px;background:#101225;border-radius:999px;overflow:hidden;margin:7px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#8f773b,#e8c76e)}.decision p{margin:0;color:#c6c2d5;font-size:12px;line-height:1.55}
+.faq-index{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.faq-index a{color:#f2d88d;text-decoration:none;background:#121426;border:1px solid #343854;padding:7px 9px;border-radius:999px;font-size:11px}
+details{background:#20233c;border:1px solid var(--line);border-radius:14px;padding:11px 12px;margin:8px 0}summary{cursor:pointer;font-size:14px;font-weight:700;color:#eee9fa}details p{color:#c6c2d5;font-size:13px;line-height:1.65;margin:10px 0 2px}
+.footer-note{color:#8d899f;font-size:11px;line-height:1.55}
+@media(max-width:520px){.grid2,.grid3,.decisions{grid-template-columns:1fr}.report-page{padding:16px}.page-title{font-size:22px}.yearrow{grid-template-columns:62px 1fr}}
+@media print{
+ body{background:white;color:#111}.wrap{max-width:none;padding:0}.topbar,#form,.back{display:none!important}.report-page{box-shadow:none;border:0;border-radius:0;margin:0;padding:18mm 15mm;min-height:260mm;page-break-after:always;background:#fff;color:#111}.block,.yearrow,.decision,details,.pillar,.el{background:#fff;color:#111;border-color:#ccc}.block p,.yearrow p,.decision p,details p,.page-desc,.muted{color:#444}.page-kicker,.block h3,.block h4,.yr,.pillar .tg{color:#7a5a16}.faq-index{display:none}
+}
 </style>
 </head>
 <body><div class="wrap">
-<div class="brand">SAJU ROBOT · V3</div>
-
-<section id="form">
-<h1>당신의 사주를<br>읽어볼게요.</h1>
-<p class="sub">사주 원국, 십성, 지장간, 신강·신약 참고값, 대운과 영역별 해석까지 한 번에 계산합니다.</p>
+<div id="form">
+<div class="brand">SAJU ROBOT · V5 REPORT</div>
+<h1>한 번에 보는<br>사주 해석 리포트</h1>
+<p class="sub">첫 페이지에서는 평생 운의 큰 흐름을 보고, 다음 페이지부터 초년·중년·장년·말년, 현재 대운·세운, 최근과 향후 5년, 그리고 사람들이 자주 묻는 120가지 질문을 상세히 풀이합니다.</p>
 <div class="card">
 <label>성별</label><div class="row"><button type="button" class="seg on" data-g="sex">여성</button><button type="button" class="seg" data-g="sex">남성</button></div>
 <label>달력</label><div class="row"><button type="button" class="seg on" data-g="cal">양력</button><button type="button" class="seg" data-g="cal">음력</button></div>
@@ -41,173 +53,81 @@ input,select{width:100%;background:#121426;border:1px solid #414565;color:white;
 <label>생년월일</label><input type="date" id="birth" value="1987-08-07" min="1900-01-01" max="2050-12-31">
 <label>태어난 시간</label><div class="time-row"><input type="time" id="time" value="18:40"><button type="button" id="unknownTime" class="unknown">시간 모름</button></div>
 <label>출생 국가</label><select id="country"><option value="KR">대한민국</option><option value="OTHER">기타</option></select>
-<button type="button" class="go" id="go">전체 사주 분석</button>
+<button type="button" class="go" id="go">전체 리포트 만들기</button>
 </div>
-<p class="note">명리 해석은 전통적 해석 체계를 일관되게 적용한 참고용 콘텐츠입니다. 미래 사건을 확정적으로 예언하지 않습니다.</p>
-</section>
-
-<section id="result" class="hide">
-<div class="center gold">四柱 · 원국</div><h2 class="center">당신의 사주 네 기둥</h2>
-<div class="card">
-<div id="inputMeta" class="muted" style="font-size:13px"></div>
-<div class="pillars">
-<div class="pillar"><small>년주</small><strong id="py">-</strong><div id="pyk"></div><div id="pytg" class="tg"></div></div>
-<div class="pillar"><small>월주</small><strong id="pm">-</strong><div id="pmk"></div><div id="pmtg" class="tg"></div></div>
-<div class="pillar"><small>일주</small><strong id="pd">-</strong><div id="pdk"></div><div class="tg">일간</div></div>
-<div class="pillar"><small>시주</small><strong id="ph">-</strong><div id="phk"></div><div id="phtg" class="tg"></div></div>
+<p class="note">건강·투자·법률·진로에 관한 내용은 사주명리 관점의 참고 해석이며 전문적인 진단이나 의사결정을 대신하지 않습니다.</p>
 </div>
 
-<div class="section"><h3>오행 분포</h3><div class="elements">
-<div class="el">木<b id="e0">0</b><span>목</span></div><div class="el">火<b id="e1">0</b><span>화</span></div><div class="el">土<b id="e2">0</b><span>토</span></div><div class="el">金<b id="e3">0</b><span>금</span></div><div class="el">水<b id="e4">0</b><span>수</span></div>
-</div></div>
-
-<div id="summary"></div>
-
-<div class="section"><h3>지장간 · 십성</h3><div id="hidden" class="chips"></div></div>
-<div class="section"><h3>대운 흐름</h3><div id="luck" class="luck"></div></div>
-
-<div class="menu">
-<button data-topic="wealth">💰 재물운</button><button data-topic="career">💼 직업·사업</button>
-<button data-topic="spouse">💞 배우자·관계</button><button data-topic="children">👨‍👩‍👧 자녀</button>
-<button data-topic="life">🧭 인생 흐름</button><button data-topic="year">✨ 올해 운세</button>
+<div id="result" class="hide">
+<div class="topbar"><button id="restart">다시 입력</button><button id="print">인쇄 / PDF 저장</button></div>
+<div id="report"></div>
 </div>
-<div id="detail" class="detail"><h3>종합 판독</h3><p>위 항목을 눌러 상세 풀이를 볼 수 있어요.</p></div>
-<div id="warn" class="warning"></div>
-<button type="button" class="back" id="back">← 다시 입력</button>
-</div>
-</section>
 </div>
 
 <script>
 (function(){
-let sex="여성", cal="양력", timeUnknown=false, current=null;
-const S="甲乙丙丁戊己庚辛壬癸", B="子丑寅卯辰巳午未申酉戌亥";
-const SK=["갑","을","병","정","무","기","경","신","임","계"], BK=["자","축","인","묘","진","사","오","미","신","유","술","해"];
-const EL=["목","화","토","금","수"], STEM_EL=[0,0,1,1,2,2,3,3,4,4], BR_EL=[4,2,0,0,2,1,1,2,3,3,2,4];
-const YANG=[1,0,1,0,1,0,1,0,1,0];
-const HIDDEN={
-"子":["癸"],"丑":["己","癸","辛"],"寅":["甲","丙","戊"],"卯":["乙"],"辰":["戊","乙","癸"],"巳":["丙","戊","庚"],
-"午":["丁","己"],"未":["己","丁","乙"],"申":["庚","壬","戊"],"酉":["辛"],"戌":["戊","辛","丁"],"亥":["壬","甲"]
-};
-
-document.querySelectorAll(".seg").forEach(b=>b.onclick=()=>{
- document.querySelectorAll('[data-g="'+b.dataset.g+'"]').forEach(x=>x.classList.remove("on")); b.classList.add("on");
- if(b.dataset.g==="sex") sex=b.textContent; else {cal=b.textContent; document.getElementById("leapWrap").classList.toggle("hide",cal!=="음력");}
-});
+let sex="여성",cal="양력",timeUnknown=false,current=null;
+const S="甲乙丙丁戊己庚辛壬癸",B="子丑寅卯辰巳午未申酉戌亥",SK=["갑","을","병","정","무","기","경","신","임","계"],BK=["자","축","인","묘","진","사","오","미","신","유","술","해"],EL=["목","화","토","금","수"],SE=[0,0,1,1,2,2,3,3,4,4],BE=[4,2,0,0,2,1,1,2,3,3,2,4],YANG=[1,0,1,0,1,0,1,0,1,0];
+const H={"子":["癸"],"丑":["己","癸","辛"],"寅":["甲","丙","戊"],"卯":["乙"],"辰":["戊","乙","癸"],"巳":["丙","戊","庚"],"午":["丁","己"],"未":["己","丁","乙"],"申":["庚","壬","戊"],"酉":["辛"],"戌":["戊","辛","丁"],"亥":["壬","甲"]};
+const COMB=[["子","丑"],["寅","亥"],["卯","戌"],["辰","酉"],["巳","申"],["午","未"]];
+const CLASH=[["子","午"],["丑","未"],["寅","申"],["卯","酉"],["辰","戌"],["巳","亥"]];
+document.querySelectorAll(".seg").forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-g="'+b.dataset.g+'"]').forEach(x=>x.classList.remove("on"));b.classList.add("on");if(b.dataset.g==="sex")sex=b.textContent;else{cal=b.textContent;leapWrap.classList.toggle("hide",cal!=="음력")}});
 unknownTime.onclick=function(){timeUnknown=!timeUnknown;this.classList.toggle("on",timeUnknown);time.disabled=timeUnknown;time.classList.toggle("disabled",timeUnknown)};
-
-function norm(a){return (a%360+360)%360}
-function angleDiff(a,b){let d=norm(a-b); return d>180?d-360:d}
-function solarLongitude(date){
- const JD=date.getTime()/86400000+2440587.5,T=(JD-2451545.0)/36525;
- const L0=norm(280.46646+36000.76983*T+0.0003032*T*T), M=norm(357.52911+35999.05029*T-0.0001537*T*T), r=M*Math.PI/180;
- const C=(1.914602-0.004817*T-0.000014*T*T)*Math.sin(r)+(0.019993-0.000101*T)*Math.sin(2*r)+0.000289*Math.sin(3*r);
- const omega=(125.04-1934.136*T)*Math.PI/180; return norm(L0+C-0.00569-0.00478*Math.sin(omega));
-}
-function crossingNear(date,target,daysSpan){
- let lo=new Date(date.getTime()-daysSpan*86400000), hi=new Date(date.getTime()+daysSpan*86400000);
- let prev=angleDiff(solarLongitude(lo),target), t0=lo;
- for(let t=lo.getTime()+21600000;t<=hi.getTime();t+=21600000){
-   let dt=new Date(t), cur=angleDiff(solarLongitude(dt),target);
-   if(prev<=0&&cur>=0){let a=t0.getTime(),b=t;for(let i=0;i<28;i++){let mid=(a+b)/2,d=angleDiff(solarLongitude(new Date(mid)),target);if(d<0)a=mid;else b=mid}return new Date((a+b)/2)}
-   prev=cur;t0=dt;
- }
- return null;
-}
-function kstDate(y,m,d,h,min){return new Date(Date.UTC(y,m-1,d,h-9,min,0))}
+function norm(a){return(a%360+360)%360}function ad(a,b){let d=norm(a-b);return d>180?d-360:d}
+function sl(date){const JD=date.getTime()/86400000+2440587.5,T=(JD-2451545)/36525,L0=norm(280.46646+36000.76983*T+0.0003032*T*T),M=norm(357.52911+35999.05029*T-0.0001537*T*T),r=M*Math.PI/180,C=(1.914602-0.004817*T-0.000014*T*T)*Math.sin(r)+(0.019993-0.000101*T)*Math.sin(2*r)+0.000289*Math.sin(3*r),o=(125.04-1934.136*T)*Math.PI/180;return norm(L0+C-0.00569-0.00478*Math.sin(o))}
+function cross(date,target,span){let lo=new Date(date-span*86400000),hi=new Date(date.getTime()+span*86400000),prev=ad(sl(lo),target),t0=lo;for(let t=lo.getTime()+21600000;t<=hi.getTime();t+=21600000){let dt=new Date(t),cur=ad(sl(dt),target);if(prev<=0&&cur>=0){let a=t0.getTime(),b=t;for(let i=0;i<28;i++){let m=(a+b)/2,d=ad(sl(new Date(m)),target);if(d<0)a=m;else b=m}return new Date((a+b)/2)}prev=cur;t0=dt}return null}
+function kst(y,m,d,h,mi){return new Date(Date.UTC(y,m-1,d,h-9,mi,0))}
 function jd(y,m,d){if(m<=2){y--;m+=12}let A=Math.floor(y/100),C=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+C-1524}
-function dayP(y,m,d){let j=jd(y,m,d),idx=((j+49)%60+60)%60;return S[idx%10]+B[idx%12]}
-function yearP(date){
- let y=date.getUTCFullYear(); // date is UTC instant; create local KST year separately below
- let k=new Date(date.getTime()+9*3600000), ky=k.getUTCFullYear();
- let lichun=crossingNear(kstDate(ky,2,4,12,0),315,3); let yy=date<lichun?ky-1:ky;
- let idx=((yy-4)%60+60)%60;return S[idx%10]+B[idx%12];
-}
-function monthP(date,yp){
- let lon=solarLongitude(date), branch=(Math.floor(norm(lon-315)/30)+2)%12;
- let ys=S.indexOf(yp[0]),first=(ys%5)*2+2,offset=(branch-2+12)%12,si=(first+offset)%10;
- return S[si]+B[branch];
-}
-function hourP(dp,h){let bi=(h===23?0:Math.floor((h+1)/2)%12),ds=S.indexOf(dp[0]),si=((ds%5)*2+bi)%10;return S[si]+B[bi]}
-function ko(p){if(!p||p==="未知")return "시간 모름";return SK[S.indexOf(p[0])]+BK[B.indexOf(p[1])]}
-function tg(dayStem,otherStem){
- if(otherStem===dayStem)return "비견";
- let de=STEM_EL[S.indexOf(dayStem)],oe=STEM_EL[S.indexOf(otherStem)],same=YANG[S.indexOf(dayStem)]===YANG[S.indexOf(otherStem)];
- let rel=(oe-de+5)%5;
- if(rel===0)return same?"비견":"겁재";
- if(rel===1)return same?"식신":"상관";
- if(rel===2)return same?"편재":"정재";
- if(rel===3)return same?"편관":"정관";
- return same?"편인":"정인";
-}
-function elementCounts(ps,includeHidden=true){
- let c=[0,0,0,0,0];
- ps.forEach(p=>{if(!p||p==="未知")return;c[STEM_EL[S.indexOf(p[0])]]++;c[BR_EL[B.indexOf(p[1])]]++; if(includeHidden)HIDDEN[p[1]].forEach(x=>c[STEM_EL[S.indexOf(x)]]+=0.35)});
- return c;
-}
-function strength(dp,mp,ps){
- let de=STEM_EL[S.indexOf(dp[0])],c=elementCounts(ps,true),support=c[de]+c[(de+4)%5],drain=c[(de+1)%5]+c[(de+2)%5]+c[(de+3)%5];
- // season bonus according to month branch's main element
- let me=BR_EL[B.indexOf(mp[1])]; if(me===de||me===(de+4)%5)support+=1.6; else drain+=0.9;
- let ratio=support/(support+drain); return {ratio, label:ratio>0.68?"매우 신강":ratio>0.56?"신강":ratio>0.44?"중화":ratio>0.32?"신약":"매우 신약"};
-}
-function jieDistance(date,forward){
- const lon=solarLongitude(date),base=315,sector=Math.floor(norm(lon-base)/30),target=norm(base+(forward?sector+1:sector)*30);
- let center=new Date(date.getTime()+(forward?8:-8)*86400000),cross=crossingNear(center,target,12);
- if(!cross)return 3;
- return Math.abs(cross-date)/86400000;
-}
-function luckPillars(mp,yp,gender,date){
- let ys=S.indexOf(yp[0]),yang=YANG[ys]===1,forward=(gender==="남성"&&yang)||(gender==="여성"&&!yang);
- let startAge=jieDistance(date,forward)/3,mi=(S.indexOf(mp[0])*12+B.indexOf(mp[1]));
- let arr=[];for(let n=1;n<=8;n++){let step=forward?n:-n,stem=S[(S.indexOf(mp[0])+step+100)%10],br=B[(B.indexOf(mp[1])+step+120)%12];arr.push({p:stem+br,age:startAge+(n-1)*10})}
- return {forward,startAge,arr};
-}
-function domainScores(dp,ps){
- let counts={비견:0,겁재:0,식신:0,상관:0,편재:0,정재:0,편관:0,정관:0,편인:0,정인:0};
- ps.forEach(p=>{if(!p||p==="未知")return;counts[tg(dp[0],p[0])]++;HIDDEN[p[1]].forEach(x=>counts[tg(dp[0],x)]+=0.35)});
- return counts;
-}
-function prose(topic,d){
- const c=d.ten,st=d.strength.label,dm=SK[S.indexOf(d.dp[0])],wealth=c.편재+c.정재,output=c.식신+c.상관,officer=c.편관+c.정관,resource=c.편인+c.정인,peer=c.비견+c.겁재;
- const weak=st.includes("신약"), strong=st.includes("신강");
- if(topic==="wealth")return `재물성은 ${wealth.toFixed(1)} 수준으로 잡힙니다. ${output>1.2?"식상이 함께 있어 자신의 생산·표현·기술을 수입으로 연결하는 흐름을 살펴볼 만합니다.":""} ${peer>1.3?"비겁의 영향도 있어 공동재산·경쟁·가족 지출처럼 돈이 분산되는 구조를 관리하는 것이 중요합니다.":""} ${weak&&wealth>1.5?"재성이 강한데 일간이 약한 편이라 '돈의 기회'와 '그 돈을 감당하는 힘'을 분리해 보는 해석이 적절합니다.":strong?"일간의 힘이 있어 재물을 직접 관리하고 결정하려는 성향이 비교적 강하게 읽힙니다.":""}`;
- if(topic==="career")return `직업에서는 식상 ${output.toFixed(1)}, 재성 ${wealth.toFixed(1)}, 관성 ${officer.toFixed(1)}, 인성 ${resource.toFixed(1)}의 균형을 봅니다. ${output+wealth>officer+resource?"시장·성과·생산성이 중요한 일, 독립적 역할이나 사업적 판단이 들어가는 일이 잘 맞는 편으로 해석됩니다.":"조직·전문성·학습 기반의 역할을 안정적으로 쌓는 쪽이 상대적으로 잘 맞습니다."} 단순히 '사업 사주/직장 사주'로 이분하지 않고 현재 대운과 함께 판단해야 합니다.`;
- if(topic==="spouse")return `관계는 배우자 별 하나만 보지 않고 일지 ${d.dp[1]}와 재성·관성, 합충을 함께 봅니다. ${peer>1.4?"자기 방식과 경계가 강해 의사결정 방식이 갈등의 핵심이 되기 쉽습니다.":""} ${wealth+officer>2?"가정과 책임, 생활 운영이 관계의 중요한 주제가 되기 쉽습니다.":""} 이혼·사별 같은 사건을 원국만으로 단정하지 않습니다.`;
- if(topic==="children")return `자녀는 식상과 시주를 중심으로 봅니다. ${d.hp==="未知"?"출생시간을 모르는 상태라 시주가 빠져 있어 자녀·말년 해석의 확신도를 낮춰야 합니다.":`시주 ${d.hp}와 식상 ${output.toFixed(1)}를 함께 보면, 자녀와의 관계에서 ${output>1.3?"표현·지원·진로 관여가 비교적 중요한 축이 될 가능성":"지나친 단정보다는 실제 관계 경험을 함께 확인하는 것이 중요한 구조"}로 읽힙니다.`}`;
- if(topic==="life")return `전체 구조는 ${dm}일간, ${st} 참고값입니다. 현재 대운은 시작 나이 약 ${d.luck.startAge.toFixed(1)}세로 계산되며 ${d.luck.forward?"순행":"역행"}합니다. 원국의 평생 성향과 대운의 시기 효과를 분리해서 보는 것이 핵심입니다.`;
- if(topic==="year"){let y=new Date().getFullYear(),yp=yearP(kstDate(y,7,1,12,0));return `${y}년 세운은 ${yp}입니다. 일간 ${d.dp[0]} 기준으로 천간 ${yp[0]}은 ${tg(d.dp[0],yp[0])}으로 작용합니다. 올해의 구체적 방향은 현재 대운과 세운의 합·충을 함께 볼 때 정확도가 올라갑니다.`}
- return "";
-}
-function convertInput(y,m,d){
- if(cal==="양력")return {y,m,d};
- if(typeof KoreanLunarCalendar==="undefined")throw new Error("음력 변환 모듈을 불러오지 못했습니다. 인터넷 연결 후 다시 시도해주세요.");
- let k=new KoreanLunarCalendar(),ok=k.setLunarDate(y,m,d,leap.checked);if(!ok)throw new Error("존재하지 않거나 지원 범위를 벗어난 음력 날짜입니다.");
- let s=k.getSolarCalendar();return {y:s.year,m:s.month,d:s.day};
-}
-
-go.onclick=()=>{
- try{
-  let v=birth.value;if(!v)throw new Error("생년월일을 선택해주세요.");let [iy,im,id]=v.split("-").map(Number);
-  let sol=convertInput(iy,im,id),tv=time.value||"12:00",hh=timeUnknown?12:Number(tv.split(":")[0]),mi=timeUnknown?0:Number(tv.split(":")[1]);
-  if(country.value!=="KR")throw new Error("현재 V3는 대한민국 표준시 기준입니다. 해외 출생지는 다음 버전에서 위치 보정을 지원합니다.");
-  let date=kstDate(sol.y,sol.m,sol.d,hh,mi),yp=yearP(date),mp=monthP(date,yp),dp=dayP(sol.y,sol.m,sol.d),hp=timeUnknown?"未知":hourP(dp,hh),ps=[yp,mp,dp,hp];
-  let str=strength(dp,mp,ps),ten=domainScores(dp,ps),luck=luckPillars(mp,yp,sex,date);
-  current={yp,mp,dp,hp,ps,strength:str,ten,luck,date,sol};
-  ["py","pm","pd","ph"].forEach((x,i)=>{document.getElementById(x).textContent=ps[i];document.getElementById(x+"k").textContent=ko(ps[i])});
-  pytg.textContent=tg(dp[0],yp[0]);pmtg.textContent=tg(dp[0],mp[0]);phtg.textContent=hp==="未知"?"":tg(dp[0],hp[0]);
-  let ec=elementCounts(ps,false);ec.forEach((n,i)=>document.getElementById("e"+i).textContent=n);
-  let mainEl=EL[ec.indexOf(Math.max(...ec))],lowEl=EL[ec.indexOf(Math.min(...ec))];
-  summary.innerHTML=`<div class="pill"><b>01 · 일간 ${dp[0]}(${SK[S.indexOf(dp[0])]})</b><span>사주 해석의 중심입니다. 신강·신약 참고값은 <b>${str.label}</b>으로 계산됩니다.</span></div><div class="pill"><b>02 · ${mainEl} 기운이 두드러집니다</b><span>겉글자 8자의 오행 분포 기준이며, 실제 강약 판단에는 계절과 지장간을 별도로 반영했습니다.</span></div><div class="pill"><b>03 · ${lowEl} 기운은 상대적으로 적습니다</b><span>오행의 단순 부족을 곧바로 '보충해야 할 기운'으로 단정하지 않습니다.</span></div>`;
-  let hiddenHtml=[];ps.forEach((p,i)=>{if(!p||p==="未知")return;HIDDEN[p[1]].forEach(x=>hiddenHtml.push(`<span class="chip">${p[1]}→${x} · ${tg(dp[0],x)}</span>`))});hidden.innerHTML=hiddenHtml.join("");
-  luck.innerHTML=luck.arr.map(x=>`<div class="box"><small>${x.age.toFixed(1)}세~</small><strong>${x.p}</strong><span>${ko(x.p)}</span></div>`).join("");
-  inputMeta.textContent=`${sex} · ${cal} ${iy}.${im}.${id}${cal==="음력"&&leap.checked?" 윤달":""} → 양력 ${sol.y}.${sol.m}.${sol.d} · ${timeUnknown?"시간 모름":tv}`;
-  warn.textContent=`대운 시작은 절입까지의 시간을 3일=1년 방식으로 환산한 참고값입니다. 출생시간이 불확실하면 시주 관련 해석은 낮은 확신도로 봐야 합니다.`;
-  detail.innerHTML="<h3>종합 판독</h3><p>"+prose("life",current)+"</p>";
-  form.classList.add("hide");result.classList.remove("hide");scrollTo(0,0);
- }catch(e){alert(e.message)}
+function dayP(y,m,d){let j=jd(y,m,d),i=((j+49)%60+60)%60;return S[i%10]+B[i%12]}
+function yearP(date){let k=new Date(date.getTime()+9*3600000),ky=k.getUTCFullYear(),lc=cross(kst(ky,2,4,12,0),315,3),yy=date<lc?ky-1:ky,i=((yy-4)%60+60)%60;return S[i%10]+B[i%12]}
+function monthP(date,yp){let lon=sl(date),br=(Math.floor(norm(lon-315)/30)+2)%12,ys=S.indexOf(yp[0]),first=(ys%5)*2+2,off=(br-2+12)%12,si=(first+off)%10;return S[si]+B[br]}
+function hourP(dp,h){let bi=h===23?0:Math.floor((h+1)/2)%12,ds=S.indexOf(dp[0]),si=((ds%5)*2+bi)%10;return S[si]+B[bi]}
+function ko(p){if(!p||p==="未知")return"시간 모름";return SK[S.indexOf(p[0])]+BK[B.indexOf(p[1])]}
+function tg(ds,os){if(os===ds)return"비견";let de=SE[S.indexOf(ds)],oe=SE[S.indexOf(os)],same=YANG[S.indexOf(ds)]===YANG[S.indexOf(os)],r=(oe-de+5)%5;if(r===0)return same?"비견":"겁재";if(r===1)return same?"식신":"상관";if(r===2)return same?"편재":"정재";if(r===3)return same?"편관":"정관";return same?"편인":"정인"}
+function ec(ps,hid=true){let c=[0,0,0,0,0];ps.forEach(p=>{if(!p||p==="未知")return;c[SE[S.indexOf(p[0])]]++;c[BE[B.indexOf(p[1])]]++;if(hid)H[p[1]].forEach(x=>c[SE[S.indexOf(x)]]+=.35)});return c}
+function strength(dp,mp,ps){let de=SE[S.indexOf(dp[0])],c=ec(ps,true),sup=c[de]+c[(de+4)%5],dr=c[(de+1)%5]+c[(de+2)%5]+c[(de+3)%5],me=BE[B.indexOf(mp[1])];if(me===de||me===(de+4)%5)sup+=1.6;else dr+=.9;let r=sup/(sup+dr);return{ratio:r,label:r>.68?"매우 신강":r>.56?"신강":r>.44?"중화":r>.32?"신약":"매우 신약"}}
+function jieDist(date,f){let lon=sl(date),sec=Math.floor(norm(lon-315)/30),target=norm(315+(f?sec+1:sec)*30),center=new Date(date.getTime()+(f?8:-8)*86400000),cr=cross(center,target,12);return cr?Math.abs(cr-date)/86400000:3}
+function luckP(mp,yp,gender,date){let ys=S.indexOf(yp[0]),yang=YANG[ys]===1,f=(gender==="남성"&&yang)||(gender==="여성"&&!yang),start=jieDist(date,f)/3,arr=[];for(let n=1;n<=9;n++){let st=S[(S.indexOf(mp[0])+(f?n:-n)+100)%10],br=B[(B.indexOf(mp[1])+(f?n:-n)+120)%12];arr.push({p:st+br,age:start+(n-1)*10})}return{forward:f,startAge:start,arr}}
+function scores(dp,ps){let c={비견:0,겁재:0,식신:0,상관:0,편재:0,정재:0,편관:0,정관:0,편인:0,정인:0};ps.forEach(p=>{if(!p||p==="未知")return;c[tg(dp[0],p[0])]++;H[p[1]].forEach(x=>c[tg(dp[0],x)]+=.35)});return c}
+function conv(y,m,d){if(cal==="양력")return{y,m,d};if(typeof KoreanLunarCalendar==="undefined")throw Error("음력 변환 모듈을 불러오지 못했습니다. 인터넷 연결 후 다시 시도해주세요.");let k=new KoreanLunarCalendar(),ok=k.setLunarDate(y,m,d,leap.checked);if(!ok)throw Error("존재하지 않거나 지원 범위를 벗어난 음력 날짜입니다.");let z=k.getSolarCalendar();return{y:z.year,m:z.month,d:z.day}}
+function ageNow(d){let k=new Date(d.date.getTime()+9*3600000);return new Date().getFullYear()-k.getUTCFullYear()}
+function curLuck(d,age){let p=d.luck.arr[0];d.luck.arr.forEach(x=>{if(age>=x.age)p=x});return p}
+function mainTen(p,d){return tg(d.dp[0],p[0])}
+function profile(d){let c=d.ten,w=c.편재+c.정재,o=c.식신+c.상관,g=c.편관+c.정관,r=c.편인+c.정인,p=c.비견+c.겁재;return{w,o,g,r,p,biz:o+w,org:g+r}}
+function relation(yb,ps){let bs=ps.filter(x=>x&&x!=="未知").map(x=>x[1]),out=[];CLASH.forEach(x=>{if(x.includes(yb)&&bs.includes(x[0]===yb?x[1]:x[0]))out.push("충")});COMB.forEach(x=>{if(x.includes(yb)&&bs.includes(x[0]===yb?x[1]:x[0]))out.push("합")});return [...new Set(out)]}
+function lifeTone(d){let p=profile(d);if(p.biz>p.org+1)return"스스로 움직여 결과를 만드는 힘이 강한 편";if(p.org>p.biz+1)return"전문성·책임·체계를 쌓아 안정적으로 가는 힘이 강한 편";return"독립성과 안정성을 상황에 맞게 조절하는 편"}
+function healthTone(d){let c=ec(d.ps,true),mx=Math.max(...c),mn=Math.min(...c),hi=EL[c.indexOf(mx)],lo=EL[c.indexOf(mn)];return`${hi} 기운이 상대적으로 강하고 ${lo} 기운은 약하게 잡힙니다. 건강운은 질병 예측이 아니라 생활 리듬의 취약점을 보는 참고 해석으로만 사용하세요. 과로·수면 부족·한쪽으로 치우친 생활 습관을 오래 끌지 않는 것이 핵심입니다.`}
+function phaseLuck(d,a){return curLuck(d,a)}
+function phaseText(kind,name,d,lp){let p=profile(d),tt=mainTen(lp.p,d),base=`${name}의 중심 대운은 ${lp.p}(${ko(lp.p)})이고, 천간의 작용은 ${tt}으로 읽힙니다.`;if(kind==="health")return`${base} ${healthTone(d)}`;if(kind==="study")return`${base} ${p.r>=p.o?"배우고 정리해 내 것으로 만드는 능력을 꾸준히 쓰는 쪽":"직접 해보고 결과를 만드는 경험형 학습"}이 더 잘 맞습니다. 시험이나 자격 공부는 운 자체보다 루틴과 환경 설계의 영향을 크게 받습니다.`;if(kind==="career")return`${base} ${p.biz>p.org?"성과·시장·독립성이 있는 일":"전문성·조직·관리"}에서 강점이 잘 드러납니다. 이 시기의 직업 변화는 '좋다/나쁘다'보다 어떤 역할로 이동하는지가 중요합니다.`;if(kind==="wealth")return`${base} 재물성은 ${p.w.toFixed(1)} 수준입니다. ${p.p>1.3?"가족·동업·경쟁·확장 과정에서 돈이 분산되는 구조를 특히 관리해야 합니다.":"돈을 모으는 규칙을 단순하게 유지하는 편이 유리합니다."}`;if(kind==="love")return`${base} 관계에서는 감정만큼 생활 방식과 책임 분담이 중요하게 작용합니다. 좋은 인연 여부를 한 글자로 단정하기보다 대운·세운에서 관계 이슈가 활성화되는 시점을 함께 봅니다.`;if(kind==="caution")return`${base} ${p.p>1.3?"자기 판단을 너무 강하게 밀어붙이는 것":"결정을 미루다가 기회를 놓치는 것"}을 조심하세요. 큰 결정은 한 번에 확정하기보다 단계적으로 확인하는 방식이 잘 맞습니다.`;return`${base} ${lifeTone(d)}이며, 이 장점을 의식적으로 쓰면 변화가 많은 시기에도 중심을 잡기 쉽습니다.`}
+function phasePage(name,range,mid,d){let lp=phaseLuck(d,mid);return`<section class="report-page"><div class="page-kicker">LIFE PHASE · ${range}</div><h2 class="page-title">${name} 상세운</h2><p class="page-desc">${phaseText("good",name,d,lp)}</p><div class="grid2"><div class="block"><h3>건강운</h3><p>${phaseText("health",name,d,lp)}</p></div><div class="block"><h3>학습·시험운</h3><p>${phaseText("study",name,d,lp)}</p></div><div class="block"><h3>진로·직업운</h3><p>${phaseText("career",name,d,lp)}</p></div><div class="block"><h3>재물운</h3><p>${phaseText("wealth",name,d,lp)}</p></div><div class="block"><h3>연애·관계운</h3><p>${phaseText("love",name,d,lp)}</p></div><div class="block"><h3>주의할 점</h3><p>${phaseText("caution",name,d,lp)}</p></div><div class="block"><h3>좋은 점·강점</h3><p>${phaseText("good",name,d,lp)}</p></div><div class="block"><h3>이 시기를 잘 쓰는 법</h3><p>대운 ${lp.p}의 성격을 원국의 강점과 연결해 쓰는 것이 핵심입니다. 결과를 서두르기보다 이 시기에 반복해서 나타나는 선택 패턴을 발견하는 것이 중요합니다.</p></div></div></section>`}
+function yearInfo(y,d){let yp=yearP(kst(y,7,1,12,0)),tt=tg(d.dp[0],yp[0]),rel=relation(yp[1],d.ps);let theme=tt.includes("재")?"돈·거래·현실 성과":tt.includes("관")?"직장·책임·평가·규칙":tt.includes("식")||tt.includes("상")?"표현·성과·이동·활동":tt.includes("인")?"학습·정비·문서·보호":"자기주도·경쟁·관계 재편";if(rel.includes("충"))theme+=" + 변화·이동 압력";if(rel.includes("합"))theme+=" + 협력·연결";return{y,yp,tt,rel,theme}}
+function decisionScore(action,d){let p=profile(d),yi=yearInfo(new Date().getFullYear(),d),s=50;if(action==="창업")s+=(p.biz-p.org)*8;if(action==="이직")s+=(p.o+p.g-2)*7;if(action==="주식")s+=(p.w-1.5)*10-(d.strength.label.includes("신약")?8:0);if(action==="부동산")s+=(p.w+p.r-2.5)*8;if(action==="내집마련")s+=(p.w+p.g+p.r-3.5)*6;if(action==="결혼")s+=((sex==="남성"?p.w:p.g)-1.2)*10;if(action==="연애")s+=((sex==="남성"?p.w:p.g)+p.o-2)*7;if(action==="이사")s+=yi.rel.includes("충")?12:yi.rel.includes("합")?6:0;if(action==="퇴사")s+=(p.biz-p.org)*7;if(action==="동업")s+=(p.p<1.3?8:-8);if(action==="시험")s+=(p.r+p.g-2)*8;if(action==="대출")s+=(p.w+p.g-2.3)*5-(d.strength.label.includes("신약")?6:0);return Math.max(20,Math.min(85,Math.round(s)))}
+function decisionText(a,d){let sc=decisionScore(a,d),level=sc>=68?"긍정 검토":sc>=52?"조건부 검토":"보수적 접근";let extra={이사:"변화운이 강하더라도 주거비·통근·가족 동의를 먼저 확인하세요.",창업:"시장 검증과 현금흐름을 작게 테스트한 뒤 규모를 키우는 방식이 안전합니다.",이직:"연봉만이 아니라 역할·권한·성장성을 함께 비교하세요.",주식:"사주는 수익률을 보장하지 않습니다. 분산·손실 한도·현금 비중을 실제 재무상황에 맞추세요.",부동산:"대출 여력·보유기간·세금·공실 위험을 사주보다 우선 확인해야 합니다.",내집마련:"거주기간과 상환여력을 먼저 계산하고 시기는 보조지표로만 사용하세요.",결혼:"시기보다 생활비·가사·가족 경계에 대한 합의가 더 중요합니다.",연애:"관계운이 열려도 만남의 양보다 관계의 질과 경계가 중요합니다.",퇴사:"다음 소득원과 비상자금을 확보한 뒤 움직이는 편이 좋습니다.",동업:"돈·역할·의사결정권을 문서로 정하는 것이 핵심입니다.",시험:"운보다 공부 루틴과 약점 보완이 우선입니다.",대출:"상환비율과 금리 변화 스트레스 테스트가 필수입니다."}[a];return`${level}. ${extra}`}
+function overview(d){let p=profile(d),c=ec(d.ps,false),mx=EL[c.indexOf(Math.max(...c))],mn=EL[c.indexOf(Math.min(...c))],a=ageNow(d),cur=curLuck(d,a);let phases=[["초년","0~19세",10],["중년","20~39세",30],["장년","40~59세",50],["말년","60세 이후",70]];return`<section class="report-page"><div class="page-kicker">ONE PAGE SUMMARY</div><h2 class="page-title">한 페이지로 보는 평생 운의 큰 흐름</h2><p class="page-desc">${SK[S.indexOf(d.dp[0])]}일간 · ${d.strength.label} 참고값 · ${lifeTone(d)}입니다. 현재 중심 대운은 ${cur.p}(${ko(cur.p)})입니다.</p><div class="pillars"><div class="pillar"><small>년주</small><strong>${d.yp}</strong><div>${ko(d.yp)}</div><div class="tg">${tg(d.dp[0],d.yp[0])}</div></div><div class="pillar"><small>월주</small><strong>${d.mp}</strong><div>${ko(d.mp)}</div><div class="tg">${tg(d.dp[0],d.mp[0])}</div></div><div class="pillar"><small>일주</small><strong>${d.dp}</strong><div>${ko(d.dp)}</div><div class="tg">일간</div></div><div class="pillar"><small>시주</small><strong>${d.hp}</strong><div>${ko(d.hp)}</div></div></div><div class="grid2"><div class="block"><h3>타고난 기질</h3><p>${lifeTone(d)}입니다. 식상 ${p.o.toFixed(1)}, 재성 ${p.w.toFixed(1)}, 관성 ${p.g.toFixed(1)}, 인성 ${p.r.toFixed(1)}, 비겁 ${p.p.toFixed(1)}의 균형을 기준으로 봅니다.</p></div><div class="block"><h3>건강·생활 리듬</h3><p>${healthTone(d)}</p></div><div class="block"><h3>오행 균형</h3><p>${mx} 기운이 가장 두드러지고 ${mn} 기운은 상대적으로 적습니다. 단순히 부족한 오행을 채워야 한다고 해석하지는 않습니다.</p></div><div class="block"><h3>현재 핵심 과제</h3><p>${yearInfo(new Date().getFullYear(),d).theme}가 현재 세운의 핵심 주제로 읽힙니다. 큰 결정은 대운과 세운의 방향을 함께 보되 현실 조건을 우선하세요.</p></div></div><div class="grid2" style="margin-top:10px">${phases.map(x=>{let lp=phaseLuck(d,x[2]);return`<div class="block phase"><h3>${x[0]} · ${x[1]}</h3><p>${phaseText("good",x[0],d,lp)}</p></div>`}).join("")}</div></section>`}
+function currentPage(d){let y=new Date().getFullYear(),a=ageNow(d),cur=curLuck(d,a),recent=[y-2,y-1,y],future=[y+1,y+2,y+3,y+4,y+5];let actions=["이사","창업","이직","주식","부동산","내집마련","결혼","연애","퇴사","동업","시험","대출"];return`<section class="report-page"><div class="page-kicker">NOW · DAEOON & SAEWOON</div><h2 class="page-title">현재 대운과 세운, 지금 고민할 법한 문제들</h2><p class="page-desc">현재 나이 약 ${a}세, 중심 대운 ${cur.p}(${ko(cur.p)}). 올해 ${yearInfo(y,d).yp} 세운과 함께 읽습니다.</p><div class="grid2"><div class="block"><h3>현재 대운</h3><p>${cur.p}의 천간은 일간 기준 ${mainTen(cur.p,d)}입니다. 이 10년은 한 사건을 예언하기보다 반복되는 선택과 환경의 방향을 보는 구간입니다.</p></div><div class="block"><h3>현재 세운</h3><p>${y}년 ${yearInfo(y,d).yp} · ${yearInfo(y,d).tt}. 핵심 테마는 ${yearInfo(y,d).theme}입니다.</p></div></div><h3 style="margin-top:18px">근래에 있었을 법한 이슈</h3><div class="timeline">${recent.map(yy=>{let z=yearInfo(yy,d);return`<div class="yearrow"><div class="yr">${yy}<br><small>${z.yp}</small></div><p>${z.theme}가 부각되기 쉬웠던 해입니다. 실제 사건이 있었다면 이직·이사·관계·돈·문서 중 어떤 영역이 움직였는지 확인해보는 방식으로 검증할 수 있습니다.</p></div>`}).join("")}</div><h3 style="margin-top:18px">향후 5년 가능성이 높은 이슈</h3><div class="timeline">${future.map(yy=>{let z=yearInfo(yy,d);return`<div class="yearrow"><div class="yr">${yy}<br><small>${z.yp}</small></div><p>${z.theme}가 주요 테마입니다. 가능성을 참고하되 투자·건강·법률·계약은 실제 자료와 전문가 판단을 우선하세요.</p></div>`}).join("")}</div><h3 style="margin-top:18px">지금 많이 고민하는 12가지 결정</h3><div class="decisions">${actions.map(a=>{let sc=decisionScore(a,d);return`<div class="decision"><b>${a} · ${sc}점</b><div class="meter"><i style="width:${sc}%"></i></div><p>${decisionText(a,d)}</p></div>`}).join("")}</div></section>`}
+const FAQ={
+"기질·성격":["나는 원래 어떤 성격인가?","내 장점은 무엇인가?","내 단점은 무엇인가?","나는 리더형인가 실무형인가?","나는 독립적인 편인가?","사람 눈치를 많이 보는 편인가?","결정을 빨리 하는 편인가?","스트레스를 받으면 어떻게 반응하는가?","나에게 맞는 생활 방식은?","내가 평생 가져가야 할 핵심 강점은?"],
+"건강·생활":["건강운은 어떤 편인가?","체력이 약한 편인가?","과로에 취약한가?","수면 관리가 중요한가?","스트레스성 증상을 조심해야 하나?","운동은 어떤 방식이 맞나?","식습관에서 주의할 점은?","나이가 들수록 무엇을 관리해야 하나?","건강검진을 더 신경 써야 하는 시기는?","마음 건강을 위해 중요한 것은?"],
+"학습·시험":["공부 머리가 있는 편인가?","암기형인가 이해형인가?","자격증 공부가 잘 맞나?","시험운은 있는가?","재도전해도 되는가?","어떤 공부 방식이 맞나?","성인이 된 뒤 공부를 다시 시작해도 되나?","대학원이나 전문교육이 맞나?","외국어 공부가 맞나?","아이디어를 실제 실력으로 바꾸는 법은?"],
+"직업·이직":["나에게 맞는 직업은?","직장생활이 맞나?","공무원·공기업이 맞나?","전문직이 맞나?","프리랜서가 맞나?","이직해도 되나?","지금 회사에 남는 게 낫나?","퇴사해도 되나?","승진운은 어떤가?","직업을 여러 번 바꾸는 사주인가?"],
+"창업·사업":["창업해도 되나?","사업가 기질이 있나?","혼자 사업하는 게 맞나?","동업해도 되나?","온라인 사업이 맞나?","오프라인 매장이 맞나?","영업이 맞나?","사업 규모를 키워도 되나?","새 사업을 시작할 때 주의점은?","사업이 잘 안될 때 버텨야 하나 접어야 하나?"],
+"재물·투자":["재물복이 있나?","돈을 잘 버는 편인가?","돈이 잘 모이는 편인가?","주식해도 되나?","단타가 맞나 장기투자가 맞나?","코인 같은 고위험 투자가 맞나?","큰돈을 굴려도 되나?","대출을 이용한 투자가 맞나?","노후자금은 어떻게 준비해야 하나?","돈 때문에 가족과 갈등이 생기기 쉬운가?"],
+"부동산·이사":["이사해도 되나?","지금 집을 옮기는 게 좋나?","내집마련해도 되나?","아파트가 맞나 상가가 맞나?","부동산투자해도 되나?","상가투자가 맞나?","토지투자가 맞나?","집을 팔아도 되나?","전세보다 매매가 맞나?","부동산 대출을 크게 써도 되나?"],
+"연애·결혼":["연애운이 있나?","올해 연애할 수 있나?","결혼운은 언제 강한가?","지금 결혼해도 되나?","늦게 결혼하는 게 더 좋은가?","배우자복이 있는가?","어떤 배우자가 맞나?","부부갈등의 원인은 무엇인가?","재혼운도 볼 수 있나?","관계를 오래 유지하려면 무엇이 중요한가?"],
+"가족·자녀":["자녀운은 어떤가?","아이와 관계는 어떤 편인가?","자녀에게 많이 관여하는 편인가?","자녀 교육에 돈을 많이 쓰는가?","부모와의 관계에서 주의할 점은?","형제자매와 돈 문제가 생기기 쉬운가?","가족을 내가 책임지는 편인가?","성인 자녀와 경계를 어떻게 잡아야 하나?","가족 사업을 해도 되나?","부모 부양 부담이 큰 편인가?"],
+"인간관계·귀인":["귀인운이 있나?","사람복이 있는가?","친구가 많은 편이 좋은가?","동료와 갈등이 생기기 쉬운가?","상사와 잘 맞는 편인가?","사람을 믿고 돈을 맡겨도 되나?","소개로 기회가 들어오는 편인가?","인맥을 넓히는 게 좋은가?","나와 잘 맞는 사람의 특징은?","관계를 끊어야 할 때는 언제인가?"],
+"시기·변화":["올해는 어떤 해인가?","내년은 어떤가?","앞으로 5년은 어떤가?","변화가 큰 시기는 언제인가?","돈이 움직이는 시기는 언제인가?","직업 변화가 강한 시기는 언제인가?","연애·결혼 이슈가 강한 시기는?","이사·이동이 생기기 쉬운 시기는?","쉬어가야 하는 시기는 언제인가?","새로운 일을 벌이기 좋은 시기는?"],
+"노후·말년":["말년운은 좋은 편인가?","노후에도 일을 하는가?","은퇴는 언제쯤이 맞나?","노후 재물운은 어떤가?","자녀에게 의존하게 되는가?","혼자 사는 삶도 맞나?","노후에 이사해도 되나?","노후에는 어떤 일을 하면 좋은가?","나이가 들수록 관계는 어떻게 변하나?","말년에 가장 중요한 과제는 무엇인가?"]
 };
-document.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{if(!current)return;let names={wealth:"재물운",career:"직업·사업",spouse:"배우자·관계",children:"자녀",life:"인생 흐름",year:"올해 운세"};detail.innerHTML=`<h3>${names[b.dataset.topic]}</h3><p>${prose(b.dataset.topic,current)}</p>`;detail.scrollIntoView({behavior:"smooth",block:"nearest"})});
-back.onclick=()=>{result.classList.add("hide");form.classList.remove("hide");scrollTo(0,0)}
+function faqAnswer(q,cat,d){let p=profile(d),y=yearInfo(new Date().getFullYear(),d),cur=curLuck(d,ageNow(d));if(/이사|옮기|이동/.test(q))return`현재 변화 신호는 ${y.rel.includes("충")?"비교적 강한 편":"보통 수준"}입니다. ${decisionText("이사",d)} 사주상 이동 신호보다 실제 주거비·통근·가족 계획을 우선하세요.`;if(/창업|사업/.test(q))return`${decisionText("창업",d)} 현재 구조는 ${p.biz>p.org?"시장·독립형 성향이 상대적으로 강합니다.":"조직·전문형 성향도 충분히 강합니다."} 사업 여부보다 검증 방식과 자금 통제가 더 중요합니다.`;if(/이직|퇴사|회사|직장/.test(q))return`${decisionText(/퇴사/.test(q)?"퇴사":"이직",d)} 현재 대운 ${cur.p}과 올해 ${y.yp}를 함께 보면 ${y.theme}가 직업 판단의 배경이 됩니다.`;if(/주식|코인|투자|큰돈|대출/.test(q))return`${decisionText(/대출/.test(q)?"대출":"주식",d)} 사주는 수익률 예측 도구가 아니므로 자산배분·손실한도·부채비율을 실제 숫자로 관리해야 합니다.`;if(/부동산|아파트|상가|토지|전세|매매|내집/.test(q))return`${decisionText(/내집/.test(q)?"내집마련":"부동산",d)} 보유기간, 세금, 금리, 현금흐름을 먼저 계산한 뒤 사주 시기는 보조적으로 사용하세요.`;if(/결혼|연애|배우자|부부|재혼/.test(q))return`${decisionText(/연애/.test(q)?"연애":"결혼",d)} 관계에서는 감정보다 생활·돈·역할분담에 대한 합의가 장기적으로 중요합니다.`;if(/건강|체력|수면|운동|식습관|마음/.test(q))return`${healthTone(d)} 특정 질환이나 발병 시점을 사주로 판단하지 말고 증상이 있으면 의료기관의 평가를 우선하세요.`;if(/공부|시험|자격|대학원|외국어|학습/.test(q))return`${p.r>=p.o?"정리·이해·반복을 통해 실력을 쌓는 방식":"실전·프로젝트·문제풀이를 통해 배우는 방식"}이 상대적으로 잘 맞습니다. 운보다 공부시간, 피드백, 반복주기가 결과에 더 직접적입니다.`;if(/자녀|아이|부모|형제|가족/.test(q))return`가족 영역에서는 책임과 경계를 함께 보는 것이 중요합니다. ${p.p>1.3?"내가 해결사 역할을 떠맡는 패턴이 생기지 않도록 돈과 책임의 선을 명확히 하는 편이 좋습니다.":"필요한 도움과 상대의 몫을 구분하는 것이 관계 안정에 도움이 됩니다."}`;if(/귀인|사람|친구|동료|상사|인맥|관계/.test(q))return`사람운은 단순히 '좋다/나쁘다'보다 어떤 관계에서 힘을 얻고 소모되는지를 봅니다. ${p.p>1.3?"주도권 충돌과 경쟁 관계를 조심하고 역할을 명확히 하세요.":"신뢰를 천천히 쌓는 관계가 오래 갑니다."}`;if(/올해|내년|5년|시기|언제|변화/.test(q))return`현재 대운은 ${cur.p}, 올해는 ${y.yp}이며 핵심 테마는 ${y.theme}입니다. 특정 사건을 확정하기보다 변화가 쉬운 영역을 미리 점검하는 방식으로 활용하세요.`;if(/노후|말년|은퇴|나이가/.test(q))return`말년은 60세 이후 대운 흐름을 중심으로 봅니다. ${phaseText("good","말년",d,phaseLuck(d,70))} 노후의 핵심은 재산 규모만큼 관계의 경계와 생활 리듬을 안정시키는 것입니다.`;return`${lifeTone(d)}입니다. 이 질문은 원국의 십성 균형과 현재 대운 ${cur.p}을 함께 보면, 한쪽으로 단정하기보다 본인의 강점을 살리되 과도한 확장을 피하는 방식이 적절합니다.`}
+function faqPages(d){let idx=Object.keys(FAQ).map((k,i)=>`<a href="#faq${i}">${k}</a>`).join("");return`<section class="report-page"><div class="page-kicker">FAQ INDEX</div><h2 class="page-title">사람들이 자주 묻는 120가지 질문</h2><p class="page-desc">아래 12개 카테고리, 총 120개 질문을 모두 이 사주에 맞춰 답합니다.</p><div class="faq-index">${idx}</div><div class="block"><p>질문을 눌러 답을 펼쳐보세요. 건강·투자·법률·계약 관련 답변은 참고용이며 실제 의사결정의 대체물이 아닙니다.</p></div></section>`+Object.entries(FAQ).map(([cat,qs],i)=>`<section class="report-page" id="faq${i}"><div class="page-kicker">FAQ ${String(i+1).padStart(2,"0")}</div><h2 class="page-title">${cat} · 10문답</h2>${qs.map((q,j)=>`<details><summary>${i*10+j+1}. ${q}</summary><p>${faqAnswer(q,cat,d)}</p></details>`).join("")}</section>`).join("")}
+function buildReport(d,meta){return overview(d)+phasePage("초년","0~19세",10,d)+phasePage("중년","20~39세",30,d)+phasePage("장년","40~59세",50,d)+phasePage("말년","60세 이후",70,d)+currentPage(d)+faqPages(d)+`<section class="report-page"><div class="page-kicker">END NOTE</div><h2 class="page-title">리포트 활용법</h2><div class="block"><p>이 리포트는 ${meta} 기준으로 계산되었습니다. 사주명리는 전통적 해석 체계이며 과학적 미래예측이나 의료·재무·법률 진단이 아닙니다. 특히 건강, 투자, 대출, 부동산, 이직, 창업, 결혼처럼 삶에 큰 영향을 주는 결정은 실제 정보와 전문가 조언을 우선하고 이 리포트는 자기점검용 보조자료로 활용하세요.</p></div></section>`}
+
+go.onclick=()=>{try{let v=birth.value;if(!v)throw Error("생년월일을 선택해주세요.");let[iy,im,id]=v.split("-").map(Number),sol=conv(iy,im,id),tv=time.value||"12:00",hh=timeUnknown?12:Number(tv.split(":")[0]),mi=timeUnknown?0:Number(tv.split(":")[1]);if(country.value!=="KR")throw Error("현재 V5는 대한민국 표준시 기준입니다.");let date=kst(sol.y,sol.m,sol.d,hh,mi),yp=yearP(date),mp=monthP(date,yp),dp=dayP(sol.y,sol.m,sol.d),hp=timeUnknown?"未知":hourP(dp,hh),ps=[yp,mp,dp,hp],str=strength(dp,mp,ps),ten=scores(dp,ps),luck=luckP(mp,yp,sex,date);current={yp,mp,dp,hp,ps,strength:str,ten,luck,date,sol};let meta=`${sex} · ${cal} ${iy}.${im}.${id}${cal==="음력"&&leap.checked?" 윤달":""} · ${timeUnknown?"시간 모름":tv} · 대한민국`;report.innerHTML=buildReport(current,meta);form.classList.add("hide");result.classList.remove("hide");scrollTo(0,0)}catch(e){alert(e.message)}};
+restart.onclick=()=>{result.classList.add("hide");form.classList.remove("hide");scrollTo(0,0)};
+print.onclick=()=>window.print();
+
+if(location.search.includes("autotest=1")){birth.value="1987-08-07";time.value="18:40";setTimeout(()=>go.click(),50)}
 })();
-</script></body></html>
+</script>
+</body></html>
